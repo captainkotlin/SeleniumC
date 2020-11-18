@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok" version "5.3.0"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    moduleName = "SeleniumC.test"
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.testCompileClasspath
+    into "libs"
+}
+
+compileTestJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs = [
+                '--module-path', classpath.asPath,
+                '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath
+        ]
+        classpath = files()
+    }
+}
+
+task testJar(type: Jar) {
+    from sourceSets.test.output
+}

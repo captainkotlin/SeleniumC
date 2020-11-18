@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tmp.Grv" tests="4" skipped="3" failures="0" errors="0" timestamp="2020-11-18T14:31:42" hostname="DESKTOP-KTKTCR1" time="0.007">
+  <properties/>
+  <testcase name="omg 1 2" classname="tmp.Grv" time="0.005">
+    <skipped/>
+  </testcase>
+  <testcase name="omg 3 4" classname="tmp.Grv" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="word" classname="tmp.Grv" time="0.008"/>
+  <testcase name="gg" classname="tmp.Grv" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[HelloHello]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

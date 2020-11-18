@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="gorest.Users" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-11-18T14:31:33" hostname="DESKTOP-KTKTCR1" time="8.046">
+  <properties/>
+  <testcase name="checkUsersStatusAndDefaultContentType" classname="gorest.Users" time="3.401"/>
+  <testcase name="when urlSuffix = .json then contentType = application/json" classname="gorest.Users" time="1.503"/>
+  <testcase name="when urlSuffix = .xml then contentType = application/xml" classname="gorest.Users" time="1.535"/>
+  <testcase name="checkUsersContentType" classname="gorest.Users" time="3.051"/>
+  <testcase name="notEmpty" classname="gorest.Users" time="1.593"/>
+  <system-out><![CDATA[setup
+setup
+setup
+setup
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

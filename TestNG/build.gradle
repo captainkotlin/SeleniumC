@@ -1,0 +1,93 @@
+plugins {
+    id "java"
+    id "io.freefair.lombok"
+    id "com.github.eirnym.js2p" version "1.0"
+    id "io.qameta.allure" version "2.8.1"
+}
+
+group "org.example"
+version "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+ext {
+    moduleName = "SeleniumC.TestNG.test"
+    groovyVer = "3.0.6"
+    allureVer = "2.8.1"
+}
+
+dependencies {
+    implementation 'org.testng:testng:6.14.3'
+    testImplementation(group: "org.testng", name: "testng", version: "7.3.0") {
+        exclude group: "org.hamcrest"
+    }
+    testImplementation(group: "io.github.sskorol", name: "test-data-supplier", version: "1.9.2") {
+        exclude group: "org.hamcrest"
+    }
+    testImplementation(group: "io.rest-assured", name: "rest-assured", version: "4.3.1") { exclude group: "org.codehaus.groovy" }
+    testImplementation(group: "io.rest-assured", name: "xml-path", version: "4.3.1") { exclude group: "org.codehaus.groovy" }
+    testImplementation(group: "io.rest-assured", name: "json-path", version: "4.3.1") { exclude group: "org.codehaus.groovy" }
+    testImplementation group: "com.networknt", name: "json-schema-validator", version: "1.0.44"
+    testImplementation group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.11.3"
+    testImplementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
+    testImplementation "commons-io:commons-io:2.8.0"
+    testImplementation group: "org.apache.commons", name: "commons-lang3", version: "3.11"
+
+    testRuntime(group: "org.codehaus.groovy", name: "groovy", version: "$groovyVer")
+    testRuntime(group: "org.codehaus.groovy", name: "groovy-xml", version: "$groovyVer")
+    testRuntime(group: "org.codehaus.groovy", name: "groovy-json", version: "$groovyVer")
+}
+
+compileTestJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs = [
+                "--module-path", classpath.asPath,
+                "--patch-module", "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath
+        ]
+        classpath = files()
+    }
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes "Automatic-Module-Name": moduleName, "Main-Class" : "org.testng.TestNG"
+    }
+    from {
+        configurations.testRuntimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    from {
+        sourceSets.test.output
+    }
+}
+
+jsonSchema2Pojo {
+    targetPackage = 'example'
+    includeJsr303Annotations = true
+    propertyWordDelimiters = ['_'] as char[]
+    targetDirectory = sourceSets.test.java.srcDirs[0]
+}
+
+test {
+    useTestNG()
+    systemProperty "testng.dtd.http", true
+    reports.html.enabled = false
+    useTestNG() {
+        useDefaultListeners = true
+        options.suites("testng.xml")
+    }
+}
+
+//allure {
+//    version = "$allureVer"
+//    autoconfigure = true
+//    aspectjweaver = true
+//    allureJavaVersion = "2.8.1"
+//    resultsDir = file("build/test-results/test")
+//}
